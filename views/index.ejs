@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD MongoDB</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">CRUD MongoDB</a>
+        </div>
+    </nav>
+
+    <!-- Container -->
+    <div class="container mt-4">
+        <!-- Card para el botón "Insertar Alumno" -->
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Insertar Alumno</h5>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAlumno">Insertar Alumno</button>
+            </div>
+        </div>
+        <!-- Tabla Alumnos -->
+        <table id="tablaAlumnos" class="table mt-4">
+            <thead>
+                <tr>
+                    <th style="display: none;">ID</th>
+                    <th>Nombre</th>
+                    <th>Edad</th>
+                    <th>Matrícula</th>
+                    <th>Teléfono</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% alumnos.forEach((alumno) => { %>
+                <tr>
+                    <td style="display: none;"><%= alumno._id %></td>
+                    <td><%= alumno.nombre %></td>
+                    <td><%= alumno.edad %></td>
+                    <td><%= alumno.matricula %></td>
+                    <td><%= alumno.telefono %></td>
+                    <td>
+                        <button type="button" class="btn btn-outline-primary btnEditar"
+                        data-bs-toggle="modal" data-bs-target="#modalEditar"
+                        data-id="<%= alumno._id %>" 
+                        data-nombre="<%= alumno.nombre %>"
+                        data-edad="<%= alumno.edad %>"
+                        data-matricula="<%= alumno.matricula %>"
+                        data-telefono="<%= alumno.telefono %>">
+                        Editar
+                    </button>
+                                            <a href="/borrar/<%= alumno._id %>" class="btn btn-outline-danger">Eliminar</a>
+                    </td>
+                </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal para Insertar/Editar Alumno -->
+<div id="modalAlumno" class="modal fade" tabindex="-1" aria-labelledby="modalAlumno" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="exampleModalLabel">Insertar Alumno</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulario para insertar/editar alumno en el modal -->
+                <form id="formularioModal" action="/crear" method="POST">
+                    <input name="id_editar" id="id_editar" type="text" hidden>
+                    <div class="mb-3">
+                        <label for="nombre_modal" class="form-label">Nombre:</label>
+                        <input id="nombre_modal" name="nombre" type="text" class="form-control" pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Ingresa solo letras" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edad_modal" class="form-label">Edad:</label>
+                        <input id="edad_modal" name="edad" type="number" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="matricula_modal" class="form-label">Matrícula:</label>
+                        <input id="matricula_modal" name="matricula" type="text" class="form-control" pattern="[0-9]{8}" title="Ingresa 8 números" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="telefono_modal" class="form-label">Teléfono:</label>
+                        <input id="telefono_modal" name="telefono" type="tel" class="form-control" pattern="[0-9]{10}" title="Ingresa 10 números" required>
+                    </div>
+                    
+                </form>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="submit" form="formularioModal" class="btn btn-danger">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Editar Alumno -->
+<div id="modalEditar" class="modal fade" tabindex="-1" aria-labelledby="modalEditar" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title" id="exampleModalLabel">Editar Alumno</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulario para editar alumno en el modal -->
+                <form id="formularioEditar" action="/editar" method="POST">
+                    <input name="id_editar" id="id_editar" type="text" hidden>
+                    <div class="mb-3">
+                        <label for="nombre_editar" class="form-label">Nombre:</label>
+                        <input id="nombre_editar" name="nombre" type="text" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edad_editar" class="form-label">Edad:</label>
+                        <input id="edad_editar" name="edad" type="number" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="matricula_editar" class="form-label">Matrícula:</label>
+                        <input id="matricula_editar" name="matricula" type="text" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="telefono_editar" class="form-label">Teléfono:</label>
+                        <input id="telefono_editar" name="telefono" type="text" class="form-control" required>
+                    </div>
+                    <!-- Botón para enviar el formulario de edición -->
+                    <button type="submit" class="btn btn-warning">Actualizar</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
